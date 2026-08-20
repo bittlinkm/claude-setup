@@ -1,0 +1,18 @@
+{
+  "claude-plugins-official": {
+    "source": {
+      "source": "github",
+      "repo": "anthropics/claude-plugins-official"
+    },
+    "installLocation": "C:\\Users\\sasch\\.claude\\plugins\\marketplaces\\claude-plugins-official",
+    "lastUpdated": "2026-08-20T20:37:40.582Z"
+  },
+  "plannotator": {
+    "source": {
+      "source": "github",
+      "repo": "backnotprop/plannotator"
+    },
+    "installLocation": "C:\\Users\\sasch\\.claude\\plugins\\marketplaces\\plannotator",
+    "lastUpdated": "2026-08-20T20:37:47.441Z"
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "version": 2,
+  "plugins": {
+    "superpowers@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "C:\\Users\\sasch\\.claude\\plugins\\cache\\claude-plugins-official\\superpowers\\6.3.0",
+        "version": "6.3.0",
+        "installedAt": "2026-08-20T20:37:43.534Z",
+        "lastUpdated": "2026-08-20T20:37:43.534Z",
+        "gitCommitSha": "b36e0829c6d0140e93cfef2ca599b1b07d4a7797"
+      }
+    ],
+    "security-guidance@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "C:\\Users\\sasch\\.claude\\plugins\\cache\\claude-plugins-official\\security-guidance\\2.0.7",
+        "version": "2.0.7",
+        "installedAt": "2026-08-20T20:37:44.633Z",
+        "lastUpdated": "2026-08-20T20:37:44.633Z"
+      }
+    ],
+    "plannotator@plannotator": [
+      {
+        "scope": "user",
+        "installPath": "C:\\Users\\sasch\\.claude\\plugins\\cache\\plannotator\\plannotator\\0.27.4",
+        "version": "0.27.4",
+        "installedAt": "2026-08-20T20:37:47.536Z",
+        "lastUpdated": "2026-08-20T20:37:47.536Z",
+        "gitCommitSha": "4f80360351416b8ccef0f6b9d41d99bc34bddd78"
+      }
+    ]
+  }
+}

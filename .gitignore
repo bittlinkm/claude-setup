@@ -1,0 +1,26 @@
+# Secrets
+.credentials.json
+
+# Runtime / ephemeral state (not shareable config)
+.last-cleanup
+.last-update-result.json
+backups/
+cache/
+chrome/
+.playwright/
+file-history/
+history.jsonl
+ide/
+projects/
+security/
+session-env/
+sessions/
+shell-snapshots/
+
+# Downloaded plugin/marketplace payloads (re-fetched by Claude Code; not "setup")
+plugins/cache/
+plugins/data/
+plugins/marketplaces/
+plugins/.last_inuse_sweep
+
+skills-disabled/.last_inuse_sweep
