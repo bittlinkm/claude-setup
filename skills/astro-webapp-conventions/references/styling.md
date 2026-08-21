@@ -1,28 +1,28 @@
 # CSS conventions
 
-There is no stylelint config — only Prettier (with `prettier-plugin-astro`) formats the files. Consistency comes from matching sibling `.astro` `<style>` blocks, not a linter.
+There is typically no stylelint config in projects built this way — only Prettier (with `prettier-plugin-astro`) formats the files. Consistency comes from matching sibling `.astro` `<style>` blocks, not a linter.
 
 ## Scoped `<style>` per component, BEM naming
 
 Every `.astro` component's styles live in its own `<style>` block at the bottom of the file (Astro scopes these automatically — no CSS Modules, no `:host`, no separate `.scss`/`.css` sibling file). One root BEM block class per component, matching the component's purpose, with `&__element`/`&--modifier`-equivalent flat BEM classes (Astro's plain CSS has no Sass nesting, so elements/modifiers are separate flat class names, not nested selectors):
 
 ```css
-.news-card {
+.card {
   display: flex;
   ...
 }
-.news-card__image {
+.card__image {
   ...
 }
-.news-card__image--placeholder {
+.card__image--placeholder {
   ...
 }
-.news-card__body {
+.card__body {
   ...
 }
 ```
 
-(`features/news/NewsCard.astro`; the identical shape appears in `TeamCard.astro` as `.team-card`/`.team-card__image`/`.team-card__badge`, `SiteHeader.astro` as `.site-header__*`, `CookieBanner.astro` as `.cookie-banner__*`.) The block class name is a plain kebab-case name for what the component *is* (`news-card`, `team-card`, `site-header`, `kontakt-form`), not prefixed with any component-library namespace — there's no shared UI-library prefix convention here like Angular's `beko-*`.
+The block class name is a plain kebab-case name for what the component *is* (`card`, `site-header`, `contact-form`), not prefixed with any component-library namespace — there's typically no shared UI-library prefix convention here like Angular's `beko-*` (see `angular-webapp-conventions`).
 
 ## State toggles: a `--modifier`-shaped class flipped via `classList`, not inline style
 
@@ -33,24 +33,19 @@ nav?.classList.toggle('site-header__nav--open');
 banner.classList.add('cookie-banner--visible');
 ```
 
-New interactive state should follow this same `<block>--<state>` naming (`--open`, `--visible`), toggled with `classList.add`/`remove`/`toggle` from a plain `<script>` — see `architecture.md`'s interactivity section.
+New interactive state should follow this same `<block>--<state>` naming (`--open`, `--visible`), toggled with `classList.add`/`remove`/`toggle` from a plain `<script>` — see `architecture.md`'s interactivity section. Note this differs from Angular's convention (a separate `is-*` class for JS-driven state, `--modifier` reserved for structural variants) — see `web-tech-conventions` for that comparison, don't assume the Astro convention transfers.
 
-## Design tokens (`features/shared/styles/tokens.css`)
+## Design tokens
 
-A single `:root` custom-property set, no light/dark theme (unlike more complex apps, this site has exactly one palette):
+Projects in this shape typically define CSS custom properties in one central file (e.g. `tokens.css`) — color, spacing, typography, radius — and reach for those instead of hardcoding hex values or raw `px`/`rem`, rather than a utility-class framework (no Tailwind). The actual token names, the palette, and whether there's more than one theme (e.g. dark mode) are entirely project-specific — check the real token file before writing new CSS rather than assuming a fixed vocabulary from this skill. See `web-tech-conventions` for the shared cross-framework principle (tokens over hardcoded values), which this project's actual token names then implement.
 
-- **Color**: `--color-primary`/`--color-primary-dark`/`--color-gold`/`--color-gray`/`--color-red` (brand palette) plus `--color-bg`/`--color-bg-muted`/`--color-bg-dark`/`--color-text`/`--color-text-muted`/`--color-text-on-dark`/`--color-border` (semantic). Always reach for these instead of a hardcoded hex — the one common exception already in the codebase is literal `#fff`/`color: #fff` on a few primary-colored buttons/CTAs (`.site-header__cta`, `.kontakt-form__submit`) where the token set has no dedicated "text on primary" token; matching that existing shortcut is fine, don't invent a new token for one-off cases.
-- **Spacing**: `--space-1` through `--space-6`, then `--space-8` (note: no `--space-7` — the scale isn't a strict arithmetic progression, it's just the sizes actually used). Always use these over a raw `rem`/`px` value for padding/margin/gap.
-- **Typography**: `--font-family-headline`/`--font-family-base` (both currently Roboto, kept as separate tokens in case they diverge), `--font-size-sm` through `--font-size-3xl`.
-- **Misc**: `--radius-base` (the only border-radius token — every rounded corner in the app uses it), `--shadow-base`.
-
-There is no breakpoint token (no `--bp-*`) — every `@media` query hardcodes its pixel value directly (`@media (min-width: 640px)`, `768px`). This is simply how the codebase does it, not a gap to "fix" by introducing breakpoint tokens.
+Some projects hardcode breakpoint pixel values directly in each `@media` query rather than defining a breakpoint token — that's a legitimate choice some codebases make, not automatically a gap to "fix" by introducing tokens; match whatever the project already does rather than introducing a new convention unasked.
 
 ## `:global()` — reaching into a child component's scoped class
 
-Astro's scoped styles are per-file, so a parent styling a child component's internals needs `:global()`, used sparingly and only for this purpose — e.g. `HomePage.astro`'s `.home-teams-carousel :global(.team-card) { flex: 0 0 14rem; }` to lay out `TeamCard.astro` instances inside the parent's carousel, and `NewsDetailPage.astro`'s `.news-detail__content :global(p + p)` to space paragraphs inside Markdown-rendered `<Content />` (which isn't scoped to the page's own style boundary). Don't reach for `:global()` to fix a plain same-component styling need — only when styling something the current file didn't render as scoped markup.
+Astro's scoped styles are per-file, so a parent styling a child component's internals needs `:global()`, used sparingly and only for this purpose — e.g. a page laying out instances of a child card component inside a carousel (`.parent-carousel :global(.card) { flex: 0 0 14rem; }`), or spacing paragraphs inside Markdown-rendered `<Content />` which isn't scoped to the page's own style boundary (`.detail__content :global(p + p)`). Don't reach for `:global()` to fix a plain same-component styling need — only when styling something the current file didn't render as scoped markup.
 
 ## Accessibility/motion details worth matching
 
-- `prefers-reduced-motion` is checked before any animation (`home.ts`'s carousel, the marquee's `@media (prefers-reduced-motion: reduce) { animation: none; }` in `HomePage.astro`) — replicate this for any new animated element.
-- Visually-hidden-but-accessible text uses the standard clip-rect sr-only pattern (`.site-header__sr-only` in `SiteHeader.astro`), not `display: none` (which would also hide it from screen readers) or a Tailwind-style `.sr-only` utility class (there's no utility-class layer in this codebase — every class is component-scoped BEM).
+- `prefers-reduced-motion` is checked before any animation (a carousel's JS, a `@media (prefers-reduced-motion: reduce) { animation: none; }` rule for a CSS marquee) — replicate this for any new animated element.
+- Visually-hidden-but-accessible text uses the standard clip-rect sr-only pattern, not `display: none` (which would also hide it from screen readers) or a Tailwind-style `.sr-only` utility class (there's typically no utility-class layer in projects like this — every class is component-scoped BEM).

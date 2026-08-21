@@ -2,7 +2,7 @@
 
 ## Project structure — Vertical Slice Architecture
 
-This codebase is organized as **Vertical Slice Architecture**, not a layered/horizontal architecture. Each entry under `features/<feature>/` is a self-contained vertical slice that cuts through every technical layer it needs — UI (`pages/`), state (`services/`), data-access (`data-access/`), domain models (`models/`), enums, and its own routes (`routes/`) — all colocated in one feature folder. There is deliberately no repo-wide `components/`, `services/`, or `models/` folder that pools code by technical layer across features; code is grouped by *feature* first, and only lifted into `shared/`/`core/` once it's genuinely cross-cutting. When adding a new feature or extending one, keep everything the feature needs inside its own slice rather than splitting it across parallel top-level folders by layer.
+This codebase follows the org-wide **Vertical Slice Architecture** principle documented in the `web-tech-conventions` skill — grouped by feature, not by technical layer. Concretely, each entry under `features/<feature>/` colocates everything that feature needs: UI (`pages/`), state (`services/`), data-access (`data-access/`), domain models (`models/`), enums, and its own routes (`routes/`) — all in one feature folder. There is deliberately no repo-wide `components/`, `services/`, or `models/` folder that pools code by technical layer across features. When adding a new feature or extending one, keep everything the feature needs inside its own slice rather than splitting it across parallel top-level folders by layer.
 
 Three roots under `src/app`: `core/`, `features/`, `shared/`.
 

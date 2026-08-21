@@ -12,7 +12,7 @@ import HomePage from '../features/home/HomePage.astro';
 <HomePage />
 ```
 
-(`src/pages/index.astro`.) All real markup, data fetching, and `<style>` lives in the feature's own `*Page.astro` (e.g. `features/home/HomePage.astro`, `features/kontakt/KontaktPage.astro`) — treat a `pages/*.astro` file that contains anything beyond an import and a render (plus `getStaticPaths` for dynamic routes) as a smell; move the logic into `features/<feature>/`.
+(`src/pages/index.astro`.) All real markup, data fetching, and `<style>` lives in the feature's own `*Page.astro` (e.g. `features/home/HomePage.astro`, `features/about/AboutPage.astro`) — treat a `pages/*.astro` file that contains anything beyond an import and a render (plus `getStaticPaths` for dynamic routes) as a smell; move the logic into `features/<feature>/`.
 
 ## Dynamic detail routes
 
@@ -21,13 +21,13 @@ A detail route pairs a thin `pages/<feature>/[slug].astro` with a `*DetailPage.a
 ```astro
 ---
 import { type CollectionEntry, render } from 'astro:content';
-import { getAllNews } from '../../features/news/news.queries';
-import NewsDetailPage from '../../features/news/NewsDetailPage.astro';
+import { getAllPosts } from '../../features/blog/blog.queries';
+import BlogDetailPage from '../../features/blog/BlogDetailPage.astro';
 
 export async function getStaticPaths(): Promise<
-  { params: { slug: string }; props: { entry: CollectionEntry<'news'> } }[]
+  { params: { slug: string }; props: { entry: CollectionEntry<'blog'> } }[]
 > {
-  const entries = await getAllNews();
+  const entries = await getAllPosts();
   return entries.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
 }
 
@@ -35,30 +35,26 @@ const { entry } = Astro.props;
 const { Content } = await render(entry);
 ---
 
-<NewsDetailPage entry={entry}>
+<BlogDetailPage entry={entry}>
   <Content />
-</NewsDetailPage>
+</BlogDetailPage>
 ```
 
-(`src/pages/news/[slug].astro`.) `getStaticPaths` and `render(entry)` live in the route file (they're routing concerns — path enumeration and turning a Markdown body into a renderable `Content` component); the `*DetailPage.astro` receives `entry` as a prop and renders the passed-in `<Content />` via `<slot />`. `teams/[slug].astro` follows the identical shape, with one addition: it guards the slot with `hasBody = Boolean(entry.body?.trim())`, since not every team page has a Markdown body — check the equivalent before assuming a slotted `<Content />` is always non-empty for a new feature.
+(`src/pages/blog/[slug].astro`.) `getStaticPaths` and `render(entry)` live in the route file (they're routing concerns — path enumeration and turning a Markdown body into a renderable `Content` component); the `*DetailPage.astro` receives `entry` as a prop and renders the passed-in `<Content />` via `<slot />`. If not every entry in a collection has a Markdown body, guard the slot with something like `hasBody = Boolean(entry.body?.trim())` rather than assuming a slotted `<Content />` is always non-empty — check the equivalent pattern for a new feature before assuming otherwise.
 
-## The wp-json compatibility API routes — not generic Astro API routes
+## Static API routes (no adapter)
 
-`src/pages/wp-json/wp/v2/posts.ts` and `.../media/[id].ts` are a deliberate compatibility shim: an external consumer (referenced in code comments as "KASU") expects a WordPress REST API-shaped feed, so these routes reshape the `news` collection into the WP `posts`/`media` JSON contract (see `src/features/news/wpFeed.ts` for the `toWpPost`/`toWpMedia` mappers and the synthetic numeric `stableId()` derived from the entry slug, since WP IDs are numeric but Astro's are string slugs).
+A project with **no adapter** — everything prerendered at build time — can still have `src/pages/**/*.ts` API routes; they just aren't live/dynamic endpoints. A route exporting a plain `GET` handler is computed once at build time; one that needs per-entry output (e.g. one static JSON file per content entry) needs its own `getStaticPaths`, exactly like a page route. These routes are typically compatibility shims reshaping a Content Collection into a JSON contract some external consumer expects (another system's feed format, an existing API a client integration was written against) — check whether the project actually has any before assuming `pages/` only ever contains `.astro` files, and give a new route the same `getStaticPaths` treatment unless it's genuinely a single fixed output.
 
-Because this site has **no adapter — everything is prerendered at build time**, these aren't live dynamic endpoints: `posts.ts` exports a plain `GET` handler (all news, computed once at build); `media/[id].ts` additionally exports `getStaticPaths` to enumerate one static JSON file per news entry with an image, exactly like a page route. If you add another wp-json-style route, it needs the same `getStaticPaths` treatment unless it's truly a single fixed output like `posts.ts`.
+## Forms
 
-`wpFeed.ts`'s `renderContentHtml()` uses `experimental_AstroContainer` to render a collection entry's Markdown `Content` to an HTML string *outside* of a normal `.astro` page render — necessary because this runs from a plain `.ts` endpoint with no page to render into, and because raw `entry.rendered.html` still has unresolved `__ASTRO_IMAGE_` placeholders until rendered through a real render pass. It also rewrites root-relative `src`/`href` URLs to absolute ones, since the external consumer isn't fetching from a page on this domain and can't resolve relative paths. Reuse this helper rather than re-deriving rendered HTML by hand if you add another external-facing feed.
-
-## Forms — Netlify Forms, not a custom endpoint
-
-`KontaktPage.astro`'s contact form is handled entirely by Netlify's build-time form detection, not a Astro API route: `data-netlify="true"`, a hidden `form-name` input matching the `name` attribute, and a `data-netlify-honeypot` spam-trap field (`bot-field`, visually hidden via CSS, `autocomplete="off"`). It posts to a static "danke" (thank-you) page (`withBase('/kontakt/danke')` → `KontaktDankePage.astro`) rather than being intercepted by JS. Because Netlify's form parser scans the **built static HTML** for `data-netlify` forms, a new form must render unconditionally in the prerendered markup — don't gate it behind client-side JS or a framework island, or Netlify won't detect it at build time.
+If a project relies on a static-hosting form-detection feature (e.g. Netlify Forms) instead of a custom endpoint, the form must render **unconditionally in the prerendered HTML** — the host's build-time scanner looks for the form's markup in the built static output (for Netlify: `data-netlify="true"` plus a hidden `form-name` input matching the `name` attribute), so don't gate a form like this behind client-side JS or a framework island, or the host won't detect it at build time. A CSS-hidden honeypot field (not `display: none`, which some spam bots skip) is a common spam-trap addition alongside it. Check the actual project for which mechanism it uses before assuming this applies — plenty of Astro sites use a custom API route or a third-party form service instead.
 
 ## Interactivity — vanilla `<script>` only, no framework
 
-There is no `@astrojs/react`/`vue`/`svelte`/`preact` integration and no `client:*` directive anywhere in the repo. All interactivity is a plain `<script>` tag using direct DOM APIs:
+Projects built this way typically have no `@astrojs/react`/`vue`/`svelte`/`preact` integration and no `client:*` directive anywhere in the repo — all interactivity is a plain `<script>` tag using direct DOM APIs:
 
-- **Inline `<script>`** (no `src`, scoped to that one component) for a few lines of logic tightly coupled to that component — e.g. `SiteHeader.astro`'s mobile-nav toggle, `CookieBanner.astro`'s consent-banner logic (reads/writes `localStorage`, toggles a `--visible` BEM modifier class).
-- **A separate `.ts` file imported via `<script src="./name.ts"></script>`** for anything longer/more stateful — e.g. `features/home/home.ts`, which drives the team-logo carousel (IntersectionObserver + hover/focus pause + `prefers-reduced-motion` check) and is loaded from `HomePage.astro`.
+- **Inline `<script>`** (no `src`, scoped to that one component) for a few lines of logic tightly coupled to that component — e.g. a header's mobile-nav toggle, or a cookie-consent banner's show/hide logic (reads/writes `localStorage`, toggles a `--visible` BEM modifier class).
+- **A separate `.ts` file imported via `<script src="./name.ts"></script>`** for anything longer/more stateful — e.g. a logo or image carousel (`IntersectionObserver` + hover/focus pause + `prefers-reduced-motion` check), loaded from the owning feature's Page component.
 
-Both patterns toggle state via classList (`nav?.classList.toggle('site-header__nav--open')`, `banner.classList.add('cookie-banner--visible')`) rather than inline `style` manipulation — match this for new interactive widgets. Always guard for `prefers-reduced-motion` before adding any animation-driven behavior (see `home.ts`), matching the existing carousel and the `styling.md` note on the marquee animation.
+Both patterns toggle state via classList (`nav?.classList.toggle('site-header__nav--open')`, `banner.classList.add('cookie-banner--visible')`) rather than inline `style` manipulation — match this for new interactive widgets. Always guard for `prefers-reduced-motion` before adding any animation-driven behavior, matching the `styling.md` note on motion.

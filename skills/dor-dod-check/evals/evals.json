@@ -1,0 +1,48 @@
+{
+  "skill_name": "dor-dod-check",
+  "evals": [
+    {
+      "id": 0,
+      "eval_name": "dor-mostly-ready-story",
+      "prompt": "Kannst du checken ob die Story ready ist bevor ich sie in den Sprint zieh?\n\nTitel: Passwort-Reset E-Mail versenden\nAls registrierter Benutzer möchte ich eine E-Mail zum Zurücksetzen meines Passworts erhalten, um wieder Zugriff auf mein Konto zu bekommen, falls ich es vergessen habe.\n\nParent Feature: Account Management\nPriorität: Hoch\n\nAkzeptanzkriterien:\n- Given ein Benutzer klickt auf 'Passwort vergessen' und gibt seine registrierte E-Mail ein, When er auf 'Senden' klickt, Then erhält er innerhalb von 5 Minuten eine E-Mail mit einem Reset-Link\n- Given der Reset-Link ist älter als 24h, When der Benutzer ihn öffnet, Then wird eine Fehlermeldung angezeigt\n\nTechnischer Ansatz: Nutzung des bestehenden Email-Service (SendGrid), neuer Endpoint POST /auth/reset-password\nBetroffene Systeme: Auth-Service, Email-Service\n\nSchätzung: noch offen",
+      "expected_output": "A DoR checklist grouped by the 8 sections. Should flag: no explicit effort estimate (section 6, 'Schätzung: noch offen'), no tasks listed (section 7), and should reasonably flag section 8 (Compliance & Security) as relevant/needing more detail since this touches auth/password-reset — not just wave it through as N/A. Acceptance criteria (section 3), formal structure (section 2), and content/goal (section 1) should be marked as satisfied. Section 4 (UX) should be judged N/A or flagged since there's a UI flow (forgot-password screen) implied but no mockups mentioned — good edge case, either judgment is defensible as long as it's explained.",
+      "assertions": [
+        {"text": "Flags the missing effort estimate (section 6, 'Schätzung: noch offen') as unmet, not satisfied"},
+        {"text": "Flags that no implementation tasks are listed (section 7) as unmet"},
+        {"text": "Marks acceptance criteria (section 3) as satisfied, since two Given/When/Then criteria are present"},
+        {"text": "Overall verdict is 'not yet ready' / 'noch nicht ready', not a blanket 'ready'"},
+        {"text": "Does not fabricate details not present in the story (e.g. does not claim tasks or an estimate exist)"},
+        {"text": "Output is organized by the DoR's numbered sections (1-8), not a free-form paragraph"}
+      ],
+      "files": []
+    },
+    {
+      "id": 1,
+      "eval_name": "dor-vague-story",
+      "prompt": "Ist das schon ready für den Sprint?\n\nStory: 'Dashboard verbessern'\nMan sollte das Dashboard schneller und schöner machen.",
+      "expected_output": "A DoR checklist that clearly comes out NOT ready — should flag missing user-story format (section 2), no acceptance criteria (section 3), unclear scope/goal (section 1), no technical approach or affected systems (section 5), no estimate (section 6), no tasks (section 7). Should not invent details that aren't there (e.g. shouldn't assume a Parent feature exists). Verdict should be an unambiguous 'not ready.'",
+      "assertions": [
+        {"text": "Overall verdict clearly states the story is not ready"},
+        {"text": "Flags that the story doesn't follow the 'Als <Rolle> möchte ich <Ziel>, um <Grund>' format (section 2)"},
+        {"text": "Flags that no acceptance criteria exist (section 3)"},
+        {"text": "Does not invent details not present in the input (e.g. does not assume a Parent feature, estimate, or technical approach exists)"},
+        {"text": "Recommends concrete next steps (e.g. refinement, splitting into smaller stories) rather than just listing failures"}
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "eval_name": "dod-check-pr",
+      "prompt": "Kann ich die Story jetzt auf Done setzen? PR ist hier:\n\nPR #482: feat(auth): add password reset email flow\n- Implemented POST /auth/reset-password endpoint\n- Added unit tests for token generation and expiry\n- Ran eslint, no warnings\n- Acceptance criteria met, verified manually against staging\n- PR still needs a second reviewer approval\n- Docs not updated yet, will do that in a follow-up",
+      "expected_output": "A DoD (User Story level) checklist. Should flag as ❌ or ❓: PR review not yet done (section 5 — explicitly stated as still needed), documentation not updated (section 6 — should NOT be waved through just because the user says 'follow-up', since a new endpoint plausibly needs doc updates), PO acceptance not mentioned (section 1). Should mark ❓ (not verifiable from text) rather than ✅ for things like 'all unit tests pass', 'CI pipelines green', 'branch merged' since none of that was confirmed in the text — a good run should NOT rubber-stamp these as done just because tests were 'added'. Overall verdict should be 'not yet done.'",
+      "assertions": [
+        {"text": "Flags missing second reviewer approval as unmet (❌), not satisfied"},
+        {"text": "Flags documentation as not updated / a gap, not waved through just because the user framed it as a 'follow-up'"},
+        {"text": "Does not mark 'CI pipelines green' / 'all unit tests pass' as ✅ verified, since no CI status was given in the input"},
+        {"text": "Does not mark PO acceptance as done, since it wasn't mentioned in the input"},
+        {"text": "Overall verdict states the story is not yet done / not ready to close"}
+      ],
+      "files": []
+    }
+  ]
+}

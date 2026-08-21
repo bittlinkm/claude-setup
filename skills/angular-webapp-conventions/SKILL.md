@@ -22,7 +22,7 @@ Read the reference file(s) relevant to the task before writing code:
 
 ## Non-negotiable architecture (most commonly violated)
 
-- **Vertical Slice Architecture**: a feature's UI, state, data-access, models, and routes all live together under `features/<feature>/`, not spread across layer-based top-level folders. Full detail in `references/architecture.md`.
+- **Vertical Slice Architecture** (org-wide principle, see `web-tech-conventions`): a feature's UI, state, data-access, models, and routes all live together under `features/<feature>/`, not spread across layer-based top-level folders. Full detail in `references/architecture.md`.
 - Every component: `standalone: true` explicit; `ChangeDetectionStrategy.OnPush` only on `shared/components/**`, omitted on feature pages.
 - DI is `inject()` only, field-initialized — never constructor injection.
 - Templates use `@if`/`@for`/`@switch` exclusively — never `*ngIf`/`*ngFor`.
