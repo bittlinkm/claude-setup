@@ -110,6 +110,12 @@ Git getrackte reguläre Dateien. Danach `git status` prüfen; im
 Konfliktfall die Symlinks löschen und `git checkout -- <pfade>` um die
 versionierten Originale wiederherzustellen.
 
+## prompt-master Skill (Prompt-Erzeugung für andere AI-Tools, kein MCP)
+Nur Markdown, keine CLI, kein Login. Kommt per `git pull` direkt mit rein
+(`skills/prompt-master/`, Quelle: github.com/nidhinjs/prompt-master, MIT).
+Aktiviert nur bei explizitem "schreib/fix mir einen Prompt für [Tool]".
+Verifizieren: keine — Skill lädt automatisch, wenn Trigger im Chat passt.
+
 ## Sonstige Standing Rules (schon in CLAUDE.md, keine Aktion nötig)
 - Neues Repo: `main` + `dev` Branch.
 - UI-Components: 21st.dev bei Bedarf.
