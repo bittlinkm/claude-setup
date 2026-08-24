@@ -1,6 +1,7 @@
 ---
-name: security-audit
+name: security-audit-cloudflare
 description: Security audit of a codebase — web apps, APIs, services, CLI tools, libraries, daemons, and more. Use when asked to find security bugs, do a security review, audit for vulnerabilities, or pen-test the code. Focuses on exploitable issues with real impact, not theoretical concerns or industry-standard behavior.
+source: Cloudflare
 ---
 
 # Security Audit
