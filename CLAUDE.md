@@ -79,3 +79,8 @@ Dieses `~/.claude` ist ein **public** Git-Repo. Firmenspezifisches Material
 **nicht** hinein — das lebt in einem separaten privaten Setup. Skills wie
 `secure-coding` oder firmenspezifische DoR/DoD-Skills kommen erst rein, wenn
 eine öffentlich unbedenkliche Version davon existiert.
+
+Bei jedem Sessionstart (egal auf welcher Maschine) prüft ein `SessionStart`-
+Hook in `settings.json` automatisch per `git fetch`, ob `~/.claude` hinter
+`origin/main` hängt, und warnt falls ja — kein automatischer Pull, nur
+Hinweis. Kommt via Git-Pull auf jede Maschine mit, auf der dieses Repo liegt.

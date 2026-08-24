@@ -15,5 +15,19 @@
     }
   },
   "theme": "dark",
-  "agentPushNotifEnabled": true
+  "agentPushNotifEnabled": true,
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "git -C ~/.claude fetch --quiet origin main 2>/dev/null; b=$(git -C ~/.claude rev-list --count HEAD..origin/main 2>/dev/null); if [ -n \"$b\" ] && [ \"$b\" -gt 0 ]; then printf '{\"systemMessage\":\"~/.claude (claude-setup) ist %s Commit(s) hinter origin/main \\u2014 git pull empfohlen.\"}' \"$b\"; fi",
+            "timeout": 15,
+            "statusMessage": "Prüfe ~/.claude auf Updates..."
+          }
+        ]
+      }
+    ]
+  }
 }
