@@ -23,9 +23,7 @@ wählen.
 - Bei Story-/Ticket-Arbeit erst Skill `dor-dod-check` (DoR-Teil): fehlende
   Akzeptanzkriterien via `grilling` erarbeiten (Given/When/Then) und als
   Vorschlag liefern, nicht raten. Priorisierung/Schätzung bleibt beim Menschen.
-- TDD als Standard: erst Test (rot), dann Code (grün). Auf Probe bis Ende
-  August 2026 — Kriterium: hat TDD bis dahin mindestens einen echten Bug vor
-  Merge gefangen? Sonst Regel anpassen.
+- TDD als Standard: erst Test (rot), dann Code (grün).
 - Annahmen explizit machen. Bei mehreren Interpretationen: nennen, nicht still
   wählen. Bei Unklarheit: fragen statt raten.
 - Simplicity first: minimaler Code, nichts Spekulatives, keine ungefragten
@@ -34,8 +32,28 @@ wählen.
   nicht "verbessern", Bestands-Stil übernehmen. Eigene Waisen (ungenutzte
   Imports/Variablen durch eigene Änderung) aufräumen, fremde melden statt löschen.
 
+## Tech Stack
+- Frontend: Angular oder Astro.
+- Backend: nur wenn nötig, dann C#.
+
+## Tools & Ressourcen
+- UI-Components bei Bedarf über 21st.dev (https://21st.dev/) laden oder
+  als Component-Inspiration nutzen, statt selbst zu bauen.
+- Bei Frontend-Design-Arbeit: Skill `impeccable` nutzen (deckt Bold/
+  Distinctive Design, keine generischen AI-Aesthetics ab).
+- Vor Design-Umsetzung: User-Vorstellungen klären via Skill
+  `superpowers:brainstorming` (+ ggf. AskUserQuestion-Tool), nicht raten.
+- Performance-optimiert bauen (Core Web Vitals im Blick behalten).
+- Diagramme: immer via Skill `excalidraw-diagram` erstellen.
+- NotebookLM (MCP `notebooklm`) für Recherche/Doku-Q&A mit Quellenangaben
+  nutzen — nicht für Code-Generierung.
+
 ## Git & Commits
-- Branching: feature/... und fix/...-Branches, nie direkt auf main.
+- Neues Repo: immer `main` + `dev` anlegen, `dev` als Default-Branch.
+- Branching: feature/... und fix/...-Branches von `dev`, nie direkt auf main
+  oder dev.
+- Bestandsrepo ohne `dev`-Branch: kurzer Hinweis, dass `dev` nachgezogen
+  werden sollte — nicht selbstständig anlegen.
 - Conventional Commits (feat/fix/chore...), englisch.
 - Selbstständig committen: erlaubt.
 

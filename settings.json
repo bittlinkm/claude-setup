@@ -2,7 +2,9 @@
   "enabledPlugins": {
     "superpowers@claude-plugins-official": true,
     "security-guidance@claude-plugins-official": true,
-    "plannotator@plannotator": true
+    "plannotator@plannotator": true,
+    "feature-dev@claude-plugins-official": false,
+    "claude-md-management@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "plannotator": {
@@ -12,5 +14,6 @@
       }
     }
   },
-  "theme": "dark"
+  "theme": "dark",
+  "agentPushNotifEnabled": true
 }

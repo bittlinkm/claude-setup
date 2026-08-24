@@ -1,6 +1,18 @@
 # Secrets
 .credentials.json
 
+# Local-only overrides (machine-specific, not shared — mirrors .claude.local.md)
+settings.local.json
+
+# Runtime / ephemeral state — daemon local auth keys, session job logs
+# (job logs can contain client/project-confidential content — never for public repo)
+daemon.lock
+daemon.log
+daemon.status.json
+daemon/
+jobs/
+paste-cache/
+
 # Runtime / ephemeral state (not shareable config)
 .last-cleanup
 .last-update-result.json

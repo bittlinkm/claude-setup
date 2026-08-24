@@ -29,6 +29,26 @@
         "lastUpdated": "2026-08-20T20:37:47.536Z",
         "gitCommitSha": "4f80360351416b8ccef0f6b9d41d99bc34bddd78"
       }
+    ],
+    "feature-dev@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "C:\\Users\\sasch\\.claude\\plugins\\cache\\claude-plugins-official\\feature-dev\\2eb931c9d105",
+        "version": "2eb931c9d105",
+        "installedAt": "2026-08-24T12:26:12.807Z",
+        "lastUpdated": "2026-08-24T12:26:12.807Z",
+        "gitCommitSha": "2eb931c9d105d47e20a83133be6d4734f83aa140"
+      }
+    ],
+    "claude-md-management@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "C:\\Users\\sasch\\.claude\\plugins\\cache\\claude-plugins-official\\claude-md-management\\1.0.0",
+        "version": "1.0.0",
+        "installedAt": "2026-08-24T12:35:48.748Z",
+        "lastUpdated": "2026-08-24T12:35:48.748Z",
+        "gitCommitSha": "2eb931c9d105d47e20a83133be6d4734f83aa140"
+      }
     ]
   }
 }
