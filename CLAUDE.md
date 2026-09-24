@@ -59,6 +59,9 @@ wählen.
 - Flow: `feature/...`/`fix/...` → PR nach `dev` → PR `dev` → `main`. Kein
   direkter Push auf `dev`/`main`. PRs öffnen ja, mergen erst nach Go des Users
   (außer Batch explizit freigegeben) — Merge löst Deployment aus (s. u.).
+- Vor jedem neuen Branch: `git fetch`, dann prüfen, ob `main` Commits hat,
+  die `dev` fehlen (`git log origin/dev..origin/main`). Falls ja, erst `dev`
+  syncen (s. CMS-Regel unten), dann von `dev` abzweigen.
 
 ## Deployment (Cloudflare Workers Builds)
 - Standard-Hosting: Cloudflare Worker, Auto-Deploy über die Git-Integration
@@ -72,8 +75,12 @@ wählen.
 - Kein manuelles `wrangler deploy` / `npm run deploy` ohne Go (No-Go
   Deployment); Merge nach `main` = Live-Deploy → nur mit Go.
 - Stolperfallen:
-  - `name` in `wrangler.jsonc` muss zum verbundenen Worker-Service passen,
-    sonst schlägt der Build fehl.
+  - Jeder Service bekommt im Dashboard einen eigenen Deploy-Command
+    `npx wrangler deploy --name <service>`. Ohne `--name` muss `name` in
+    `wrangler.jsonc` zum Service passen, sonst schlägt der Build fehl.
+  - Dashboard-Warnung "Update wrangler.jsonc … name" ist bei zwei Services
+    unvermeidbar → ignorieren. Cloudflares Auto-PR, der `name` ändert, nie
+    mergen (Risiko: `dev`-Deploys landen auf Live).
   - Deploy überschreibt Plain-Text-`vars` mit dem Stand aus `wrangler.jsonc`
     → öffentliche Werte (z. B. OAuth Client-ID) in `wrangler.jsonc` pflegen,
     nicht im Dashboard. Secrets (`wrangler secret put` / Dashboard) bleiben
@@ -83,12 +90,15 @@ wählen.
   - Beide Services bauen aus demselben `wrangler.jsonc`; welcher Worker
     getroffen wird, steuert `npx wrangler deploy --name <service>` im
     Deploy-Command des Services. `--name` = exakter Service-Name halten
-    (Tippfehler fallen nicht auf, der verbundene Service wird trotzdem
-    deployt — Check-Run "Script: <service>" zeigt das tatsächliche Ziel).
+    (Tippfehler fallen nicht auf — Check-Run "Script: <service>" zeigt das
+    tatsächliche Ziel).
 - CMS (z. B. Sveltia) darf direkt auf `main` committen (Content geht sofort
   live). Dann `main` regelmäßig nach `dev` zurückholen: Fast-Forward, wenn
   `dev` nichts Eigenes hat
-  (`git push origin origin/main:refs/heads/dev`), sonst PR `main` → `dev`.
+  (`git push origin origin/main:refs/heads/dev`, einzige erlaubte Ausnahme
+  vom Direkt-Push auf `dev`), sonst PR `main` → `dev`. Konflikte sind bei
+  reinem Content selten, möglich aber, wenn `dev` dieselben Content-Dateien
+  oder das Schema (Felder) geändert hat.
 
 ## Verifikation
 - Nichts als fertig melden ohne Beweis (Tests grün, Befehl gelaufen, Output gezeigt).
