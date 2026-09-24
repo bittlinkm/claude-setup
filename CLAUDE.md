@@ -56,6 +56,31 @@ wählen.
   werden sollte — nicht selbstständig anlegen.
 - Conventional Commits (feat/fix/chore...), englisch.
 - Selbstständig committen: erlaubt.
+- Flow: `feature/...`/`fix/...` → PR nach `dev` → PR `dev` → `main`. Kein
+  direkter Push auf `dev`/`main`. PRs öffnen ja, mergen erst nach Go des Users
+  (außer Batch explizit freigegeben) — Merge löst Deployment aus (s. u.).
+
+## Deployment (Cloudflare Workers Builds)
+- Standard-Hosting: Cloudflare Worker, Auto-Deploy über die Git-Integration
+  (Workers Builds), keine eigene GitHub Action.
+- Zwei Worker-Services, je einer pro Branch:
+  - `<projekt>-dev` ← Production-Branch `dev` (Staging, `*.workers.dev`).
+  - `<projekt>` ← Production-Branch `main` (Live).
+- Deploy passiert automatisch beim Merge auf den jeweiligen Branch. Status
+  prüfen über die GitHub Check-Runs "Workers Builds: <service>"
+  (`gh api repos/<owner>/<repo>/commits/<sha>/check-runs`).
+- Kein manuelles `wrangler deploy` / `npm run deploy` ohne Go (No-Go
+  Deployment); Merge nach `main` = Live-Deploy → nur mit Go.
+- Stolperfallen:
+  - `name` in `wrangler.jsonc` muss zum verbundenen Worker-Service passen,
+    sonst schlägt der Build fehl.
+  - Deploy überschreibt Plain-Text-`vars` mit dem Stand aus `wrangler.jsonc`
+    → öffentliche Werte (z. B. OAuth Client-ID) in `wrangler.jsonc` pflegen,
+    nicht im Dashboard. Secrets (`wrangler secret put` / Dashboard) bleiben
+    erhalten, lokal in `.dev.vars` (gitignored, `.dev.vars.example` committen).
+  - Neue Secrets greifen erst nach dem nächsten Deploy (ggf. leerer
+    `chore: redeploy`-Commit).
+- CMS (z. B. Sveltia) committet auf `dev`, nie direkt auf `main`.
 
 ## Verifikation
 - Nichts als fertig melden ohne Beweis (Tests grün, Befehl gelaufen, Output gezeigt).
