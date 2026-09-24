@@ -80,7 +80,15 @@ wählen.
     erhalten, lokal in `.dev.vars` (gitignored, `.dev.vars.example` committen).
   - Neue Secrets greifen erst nach dem nächsten Deploy (ggf. leerer
     `chore: redeploy`-Commit).
-- CMS (z. B. Sveltia) committet auf `dev`, nie direkt auf `main`.
+  - Beide Services bauen aus demselben `wrangler.jsonc`; welcher Worker
+    getroffen wird, steuert `npx wrangler deploy --name <service>` im
+    Deploy-Command des Services. `--name` = exakter Service-Name halten
+    (Tippfehler fallen nicht auf, der verbundene Service wird trotzdem
+    deployt — Check-Run "Script: <service>" zeigt das tatsächliche Ziel).
+- CMS (z. B. Sveltia) darf direkt auf `main` committen (Content geht sofort
+  live). Dann `main` regelmäßig nach `dev` zurückholen: Fast-Forward, wenn
+  `dev` nichts Eigenes hat
+  (`git push origin origin/main:refs/heads/dev`), sonst PR `main` → `dev`.
 
 ## Verifikation
 - Nichts als fertig melden ohne Beweis (Tests grün, Befehl gelaufen, Output gezeigt).
