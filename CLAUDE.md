@@ -23,7 +23,14 @@ wählen.
 - Bei Story-/Ticket-Arbeit erst Skill `dor-dod-check` (DoR-Teil): fehlende
   Akzeptanzkriterien via `grilling` erarbeiten (Given/When/Then) und als
   Vorschlag liefern, nicht raten. Priorisierung/Schätzung bleibt beim Menschen.
-- TDD als Standard: erst Test (rot), dann Code (grün).
+- TDD Pflicht in jedem Projekt, keine Ausnahme: erst Test (rot), dann Code
+  (grün). Keine Code-Änderung ohne zugehörigen Test. Projekt ohne Test-Setup:
+  Test-Setup zuerst einrichten (Framework-Standard, z. B. Vitest/Jest bzw. xUnit).
+- Jedes Projekt braucht eine `AGENTS.md` im Repo-Root für projektspezifisches
+  Wissen (Stack, Befehle, Konventionen, Stolperfallen, Entscheidungen). Fehlt
+  sie: anlegen (Vorschlag zeigen, dann committen). Neues Projektwissen dort
+  festhalten, nicht in dieser globalen Datei. Existiert eine Projekt-`CLAUDE.md`,
+  verweist sie nur noch auf `AGENTS.md`.
 - Annahmen explizit machen. Bei mehreren Interpretationen: nennen, nicht still
   wählen. Bei Unklarheit: fragen statt raten.
 - Simplicity first: minimaler Code, nichts Spekulatives, keine ungefragten
