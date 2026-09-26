@@ -32,6 +32,10 @@ wählen.
   festhalten, nicht in dieser globalen Datei. Im Projekt nur `AGENTS.md`, keine
   `CLAUDE.md`/`CLAUDE.local.md` (würde das Laden der `AGENTS.md` verhindern).
   `CLAUDE.md` ist nur für das globale Claude-Setup in `~/.claude`.
+  Bestandsprojekt mit `CLAUDE.md` statt `AGENTS.md`: Umzug muss nachgezogen
+  werden (`git mv CLAUDE.md AGENTS.md` bzw. Inhalt in bestehende `AGENTS.md`
+  mergen) — beim ersten Arbeiten im Projekt ansprechen, per eigenem
+  `chore/agents-md`-Branch + PR umsetzen.
 - Annahmen explizit machen. Bei mehreren Interpretationen: nennen, nicht still
   wählen. Bei Unklarheit: fragen statt raten.
 - Simplicity first: minimaler Code, nichts Spekulatives, keine ungefragten
