@@ -2,7 +2,7 @@
 
 ## Vorrang bei Widersprüchen
 1. Explizite Anweisung im Chat.
-2. Projekt-`CLAUDE.md` / `AGENTS.md` im jeweiligen Repo.
+2. Projekt-`AGENTS.md` im jeweiligen Repo.
 3. Diese Datei.
 
 Widerspruch zwischen diesen Ebenen: melden und fragen, nicht still eine Seite
@@ -29,8 +29,9 @@ wählen.
 - Jedes Projekt braucht eine `AGENTS.md` im Repo-Root für projektspezifisches
   Wissen (Stack, Befehle, Konventionen, Stolperfallen, Entscheidungen). Fehlt
   sie: anlegen (Vorschlag zeigen, dann committen). Neues Projektwissen dort
-  festhalten, nicht in dieser globalen Datei. Existiert eine Projekt-`CLAUDE.md`,
-  verweist sie nur noch auf `AGENTS.md`.
+  festhalten, nicht in dieser globalen Datei. Im Projekt nur `AGENTS.md`, keine
+  `CLAUDE.md`/`CLAUDE.local.md` (würde das Laden der `AGENTS.md` verhindern).
+  `CLAUDE.md` ist nur für das globale Claude-Setup in `~/.claude`.
 - Annahmen explizit machen. Bei mehreren Interpretationen: nennen, nicht still
   wählen. Bei Unklarheit: fragen statt raten.
 - Simplicity first: minimaler Code, nichts Spekulatives, keine ungefragten
