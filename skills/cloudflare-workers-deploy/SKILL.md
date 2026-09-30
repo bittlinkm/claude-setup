@@ -90,6 +90,13 @@ live immediately. `dev` then falls behind and must be synced:
    fast-forward: `git push origin origin/main:refs/heads/dev` — the one allowed
    direct push to `dev`, never with `--force`.
 3. Otherwise open a PR `main` → `dev`.
+   **Before merging it**, check `gh repo view --json deleteBranchOnMerge,defaultBranchRef`:
+   with `deleteBranchOnMerge: true` and default branch `dev`, GitHub deletes
+   `main` (the PR's head branch) on merge. Only merge if `main` is protected by
+   an active ruleset with "Restrict deletions"
+   (`gh api repos/<owner>/<repo>/rules/branches/main` lists `deletion`);
+   otherwise stop and ask. If `main` was deleted anyway, the user restores it
+   via "Restore branch" in the PR (a push to `main` is blocked as production).
 
 Do this before creating any new branch. Content-only syncs rarely conflict, but
 they can when `dev` changed the same content files, or changed the content
