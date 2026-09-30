@@ -22,7 +22,8 @@ Two Worker services, both connected to the same repo:
 | `<project>-dev` | `dev` | Staging, `*.workers.dev` URL | `npx wrangler deploy --name <project>-dev` |
 | `<project>` | `main` | Live, custom domain | `npx wrangler deploy --name <project>` |
 
-Build command: `npm run build`, root directory `/`.
+Build command: `npm run build`, root directory `/`. Astro projects: the
+`build` script is `astro build --force` (see pitfalls).
 
 New-project checklist (the dashboard steps are the user's; hand them over as a list):
 1. Repo has `main` + `dev`, GitHub default branch `dev`.
@@ -70,6 +71,12 @@ fixed sleeps.
 - **New secrets take effect only after the next deploy**: trigger one with an
   empty commit (`git commit --allow-empty -m "chore: redeploy to pick up <SECRET>"`)
   on the branch of that service — for `main` that is a live deploy, so only with go.
+- **Astro: deleted content stays live**: when a content collection folder
+  becomes empty (last CMS entry deleted), Astro's `glob` loader keeps its
+  cached entries, and Workers Builds reuses that cache between builds — the
+  build succeeds but still shows the old entries. Use
+  `"build": "astro build --force"` in `package.json` so every build rebuilds
+  the content store (logs a harmless `data store cleared (force)` warning).
 - Never write secret values into `wrangler.jsonc`, `.dev.vars.example` or any
   committed file.
 
