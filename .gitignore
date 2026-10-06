@@ -36,3 +36,12 @@ plugins/marketplaces/
 plugins/.last_inuse_sweep
 
 skills-disabled/.last_inuse_sweep
+
+# Runtime / sync state and user uploads (uploads can contain client files — never for public repo)
+feedback/
+plans/
+state/
+uploads/
+stats-cache.json
+plugins/synced/
+skills/synced/
