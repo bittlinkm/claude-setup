@@ -45,3 +45,6 @@ uploads/
 stats-cache.json
 plugins/synced/
 skills/synced/
+
+# Impeccable native engine binary (~21 MB, fetched by `npx impeccable update`)
+skills/impeccable/scripts/bin/
