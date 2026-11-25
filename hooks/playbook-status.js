@@ -1,5 +1,5 @@
 'use strict';
-// SessionStart hook: reports a missing or outdated playbook and skills that are not linked.
+// SessionStart hook: reports a missing or outdated playbook, skills and agents that are not linked.
 // Reads local files only: no network, no writes. Silent when everything is fine, exit code always 0.
 
 const fs = require('node:fs');
@@ -95,12 +95,23 @@ function skillHint(root) {
   return `Playbook-Skills nicht verknüpft: ${names.slice(0, MAX_LISTED).map(printable).join(', ')}${more}. Befehl: ~/.playbook/claude/README.md, Abschnitt Skills.`;
 }
 
+// The agents folder is linked as a whole.
+function agentHint(root) {
+  const source = path.join(root, 'claude', 'agents');
+  const link = path.join(os.homedir(), '.claude', 'agents', 'ext-playbook');
+  const real = (file) => attempt(() => fs.realpathSync(file));
+  const hasAgents = attempt(() => fs.readdirSync(source), []).some((name) => name.endsWith('.md'));
+  const dangling = attempt(() => fs.lstatSync(link)) !== null && real(link) === null;
+  if (!dangling && (!hasAgents || real(link) === real(source))) return null;
+  return 'Playbook-Agents nicht verknüpft. Befehl: ~/.playbook/claude/README.md, Abschnitt Agents.';
+}
+
 function status() {
   const root = path.join(os.homedir(), '.playbook');
   if (!(read(path.join(root, 'AGENTS.md')) || '').trim()) {
     return 'Playbook fehlt (~/.playbook), es gelten nur die Regeln aus CLAUDE.md.';
   }
-  return [branchHint(root), guidelineHint(root), skillHint(root)].filter(Boolean).join('\n');
+  return [branchHint(root), guidelineHint(root), skillHint(root), agentHint(root)].filter(Boolean).join('\n');
 }
 
 try {
