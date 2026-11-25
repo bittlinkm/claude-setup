@@ -45,10 +45,11 @@ test('is silent without playbook or without this hook', (t) => {
   }
 });
 
-test('a damaged hook does not get in the way', (t) => {
+test('a damaged hook is reported without blocking', (t) => {
   for (const text of ['function (', 'throw new Error("x");', "require('./missing.js');"]) {
     const r = run(setup(t, { 'hooks/bad.js': text }), 'bad');
-    assert.deepEqual([r.status, r.stdout, r.stderr], [0, '', ''], text);
+    assert.deepEqual([r.status, r.stdout], [1, ''], text); // 1 is a visible, non-blocking error
+    assert.match(r.stderr, /Playbook-Hook bad ist defekt/);
   }
 });
 

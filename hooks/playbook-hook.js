@@ -13,6 +13,8 @@ if (/^[a-z]+(-[a-z]+)*$/.test(name) && fs.existsSync(file)) {
   try {
     require(file);
   } catch {
-    // A damaged hook must not get in the way of the work.
+    // Exit code 1 is a visible error that does not block: a broken guard must not disappear unnoticed.
+    process.stderr.write(`Playbook-Hook ${name} ist defekt und prüft gerade nichts.\n`);
+    process.exitCode = 1;
   }
 }
