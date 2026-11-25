@@ -34,9 +34,7 @@ melden, dann nach dieser Datei arbeiten.
 - Bei Story-/Ticket-Arbeit erst Skill `dor-dod-check` (DoR-Teil): fehlende
   Akzeptanzkriterien via `grilling` erarbeiten (Given/When/Then) und als
   Vorschlag liefern, nicht raten. Priorisierung/Schätzung bleibt beim Menschen.
-- TDD Pflicht in jedem Projekt, keine Ausnahme: erst Test (rot), dann Code
-  (grün). Keine Code-Änderung ohne zugehörigen Test. Projekt ohne Test-Setup:
-  Test-Setup zuerst einrichten (Framework-Standard, z. B. Vitest/Jest bzw. xUnit).
+- TDD Pflicht: erst Test (rot), dann Code (grün). Details: Playbook.
 - Jedes Projekt braucht eine `AGENTS.md` im Repo-Root für projektspezifisches
   Wissen (Stack, Befehle, Konventionen, Stolperfallen, Entscheidungen). Fehlt
   sie: anlegen (Vorschlag zeigen, dann committen). Neues Projektwissen dort
@@ -96,6 +94,7 @@ melden, dann nach dieser Datei arbeiten.
 ## No-Gos (nie ohne explizites Go)
 - Nichts löschen.
 - Kein `git push --force`.
+- Kein Merge, kein direkter Push auf `main`/`dev` (Ausnahmen: Playbook, `topics/git.md`).
 - Kein Deployment.
 - Keine Major-Updates von Dependencies.
 - Secrets/API-Keys/Passwörter nie in Dateien schreiben — in CLAUDE.md nie, auch nicht mit Go.
