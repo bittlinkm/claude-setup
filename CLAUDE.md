@@ -43,18 +43,6 @@ melden, dann nach dieser Datei arbeiten.
   nicht "verbessern", Bestands-Stil übernehmen. Eigene Waisen (ungenutzte
   Imports/Variablen durch eigene Änderung) aufräumen, fremde melden statt löschen.
 
-## Tools & Ressourcen
-- UI-Components bei Bedarf über 21st.dev (https://21st.dev/) laden oder
-  als Component-Inspiration nutzen, statt selbst zu bauen.
-- Bei Frontend-Design-Arbeit: Skill `impeccable` nutzen (deckt Bold/
-  Distinctive Design, keine generischen AI-Aesthetics ab).
-- Vor Design-Umsetzung: User-Vorstellungen klären via Skill
-  `superpowers:brainstorming` (+ ggf. AskUserQuestion-Tool), nicht raten.
-- Performance-optimiert bauen (Core Web Vitals im Blick behalten).
-- Diagramme: immer via Skill `excalidraw-diagram` erstellen.
-- NotebookLM (MCP `notebooklm`) für Recherche/Doku-Q&A mit Quellenangaben
-  nutzen — nicht für Code-Generierung.
-
 ## Deployment (Cloudflare Workers Builds)
 - Standard-Hosting: Cloudflare Worker je Branch (`<projekt>-dev` ← `dev`,
   `<projekt>` ← `main`), Auto-Deploy über Workers Builds. Setup, Stolperfallen,
