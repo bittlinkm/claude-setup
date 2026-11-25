@@ -86,7 +86,7 @@ function beforeEdit(input, cwd) {
   const target = input.file_path || input.notebook_path;
   if (typeof target !== 'string' || !target) return;
   const { full, folder } = resolveReal(path.resolve(cwd, target));
-  if (path.basename(full).toLowerCase() === 'test-lock.json' && /[\\/]\.git[\\/]/.test(full)) {
+  if (path.basename(full).toLowerCase() === 'test-lock.json' && folder && git(folder, 'rev-parse', '--is-inside-git-dir') === 'true') {
     return block('Die Sperrdatei der Tests wird nicht von Hand geändert. Stoppen und den Menschen fragen.');
   }
   if (!folder) return;
@@ -143,10 +143,29 @@ let text = '';
 process.stdin.on('data', (chunk) => {
   text += chunk;
 });
+// An error must not switch the lock off, but it must not stop work without a lock either.
+function failed(event) {
+  if (!['PreToolUse', 'PostToolUse'].includes(event.hook_event_name)) return;
+  const target = (event.tool_input || {}).file_path;
+  const cwd = event.cwd || process.cwd();
+  const dirs = [cwd, typeof target === 'string' ? resolveReal(path.resolve(cwd, target)).folder : null].filter(Boolean);
+  if (dirs.some((dir) => checkWithoutCore(dir).state !== 'none')) block('Die Testsperre konnte nicht geprüft werden. Stoppen und den Menschen fragen.');
+}
+
 process.stdin.on('end', () => {
+  let event;
   try {
-    main(JSON.parse(text) || {});
+    event = JSON.parse(text) || {};
   } catch {
-    // Errors of the hook itself must not get in the way of the work.
+    return;
+  }
+  try {
+    main(event);
+  } catch {
+    try {
+      failed(event);
+    } catch {
+      // Nothing is known about the repository: stay out of the way.
+    }
   }
 });

@@ -79,3 +79,35 @@ test('does not ask for them without a lock', { skip }, (t) => {
     assert.equal(r.out, '');
   }
 });
+
+test('an internal error does not switch the lock off', { skip }, (t) => {
+  const env = setup(t, { core: 'module.exports = { checkLock: (d) => ({ state: "active", root: d, story: "s", files: [{}] }) };' });
+  const r = edit(env, path.join(env.root, 'a.test.ts'));
+  assert.equal(r.code, 2, r.out + r.err);
+});
+
+test('an internal error without a lock stays out of the way', { skip }, (t) => {
+  const env = setup(t, { lock: false, core: 'module.exports = { checkLock: (d) => ({ state: "active", root: d, story: "s", files: [{}] }) };' });
+  const r = edit(env, path.join(env.root, 'a.test.ts'));
+  assert.equal(r.code, 0, r.err);
+});
+
+test('protects the lock file in a separate git directory', { skip }, (t) => {
+  const env = setup(t, { lock: false });
+  const root = path.join(path.dirname(env.root), 'separate');
+  const gitDir = path.join(path.dirname(env.root), 'gitdata');
+  fs.mkdirSync(root);
+  git(root, 'init', '-q', '-b', 'feature/x', `--separate-git-dir=${gitDir}`);
+  fs.writeFileSync(path.join(root, 'a.test.ts'), 'x\n');
+  git(root, 'add', '.');
+  git(root, 'commit', '-q', '-m', 'init');
+  execFileSync(process.execPath, [CORE, 'lock', 's', 'a.test.ts'], { cwd: root, stdio: 'pipe' });
+  const r = edit({ ...env, root }, path.join(gitDir, 'test-lock.json'));
+  assert.equal(r.code, 2, r.out + r.err);
+  assert.match(r.err, /Sperrdatei/);
+});
+
+test('a project file that is only named test-lock.json can be edited', { skip }, (t) => {
+  const env = setup(t);
+  assert.equal(edit(env, path.join(env.root, 'test-lock.json')).code, 0);
+});
