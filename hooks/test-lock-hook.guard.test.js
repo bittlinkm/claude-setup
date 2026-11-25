@@ -111,3 +111,34 @@ test('a project file that is only named test-lock.json can be edited', { skip },
   const env = setup(t);
   assert.equal(edit(env, path.join(env.root, 'test-lock.json')).code, 0);
 });
+
+function raw(env, tool_name, tool_input, extra = {}) {
+  const r = spawnSync(process.execPath, [HOOK], {
+    input: JSON.stringify({ hook_event_name: 'PreToolUse', tool_name, cwd: extra.cwd || env.root, tool_input }),
+    encoding: 'utf8',
+    timeout: 20000,
+    env: { ...process.env, HOME: env.home, USERPROFILE: env.home, ...extra.vars },
+  });
+  return { code: r.status, out: r.stdout, err: r.stderr };
+}
+
+test('inherited git variables do not switch the lock off', { skip }, (t) => {
+  const env = setup(t);
+  for (const vars of [{ GIT_DIR: path.join(env.home, 'nowhere') }, { GIT_WORK_TREE: env.home }, { GIT_CEILING_DIRECTORIES: path.dirname(env.root), GIT_DIR: env.home }]) {
+    const r = raw(env, 'Edit', { file_path: path.join(env.root, 'a.test.ts') }, { vars });
+    assert.equal(r.code, 2, JSON.stringify(vars) + r.out + r.err);
+  }
+  const lock = raw(env, 'Write', { file_path: path.join(env.root, '.git', 'test-lock.json') }, { vars: { GIT_DIR: path.join(env.home, 'nowhere') } });
+  assert.equal(lock.code, 2, lock.out + lock.err);
+});
+
+test('an internal error while a notebook is edited does not switch the lock off', { skip }, (t) => {
+  const env = setup(t, { core: 'module.exports = { checkLock: (d) => ({ state: "active", root: d, story: "s", files: [{}] }) };' });
+  const r = raw(env, 'NotebookEdit', { notebook_path: path.join(env.root, 'a.test.ts') }, { cwd: env.home });
+  assert.equal(r.code, 2, r.out + r.err);
+});
+
+test('a file named test-lock.json outside of any repository can be edited', { skip }, (t) => {
+  const env = setup(t);
+  assert.equal(raw(env, 'Write', { file_path: path.join(env.home, 'test-lock.json') }, { cwd: env.home }).code, 0);
+});

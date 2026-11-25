@@ -11,6 +11,9 @@ const os = require('node:os');
 const path = require('node:path');
 const { execFileSync } = require('node:child_process');
 
+// Inherited variables such as GIT_DIR would point git, and the core, at another repository.
+for (const name of Object.keys(process.env)) if (name.toUpperCase().startsWith('GIT_')) delete process.env[name];
+
 const EDIT_TOOLS = ['Edit', 'Write', 'MultiEdit', 'NotebookEdit'];
 const SHELL_TOOLS = ['Bash', 'PowerShell'];
 const BROKEN = 'Die Sperrdatei der Tests ist defekt. Stoppen und den Menschen fragen.';
@@ -82,11 +85,18 @@ function block(message) {
   process.exitCode = 2;
 }
 
+function insideGitDir(full, folder) {
+  const parts = full.split(path.sep).map((part) => part.toLowerCase());
+  return parts.includes('.git') || git(folder, 'rev-parse', '--is-inside-git-dir') === 'true';
+}
+
+const targetOf = (input) => input.file_path || input.notebook_path;
+
 function beforeEdit(input, cwd) {
-  const target = input.file_path || input.notebook_path;
+  const target = targetOf(input);
   if (typeof target !== 'string' || !target) return;
   const { full, folder } = resolveReal(path.resolve(cwd, target));
-  if (path.basename(full).toLowerCase() === 'test-lock.json' && folder && git(folder, 'rev-parse', '--is-inside-git-dir') === 'true') {
+  if (path.basename(full).toLowerCase() === 'test-lock.json' && folder && insideGitDir(full, folder)) {
     return block('Die Sperrdatei der Tests wird nicht von Hand geändert. Stoppen und den Menschen fragen.');
   }
   if (!folder) return;
@@ -146,7 +156,7 @@ process.stdin.on('data', (chunk) => {
 // An error must not switch the lock off, but it must not stop work without a lock either.
 function failed(event) {
   if (!['PreToolUse', 'PostToolUse'].includes(event.hook_event_name)) return;
-  const target = (event.tool_input || {}).file_path;
+  const target = targetOf(event.tool_input || {});
   const cwd = event.cwd || process.cwd();
   const dirs = [cwd, typeof target === 'string' ? resolveReal(path.resolve(cwd, target)).folder : null].filter(Boolean);
   if (dirs.some((dir) => checkWithoutCore(dir).state !== 'none')) block('Die Testsperre konnte nicht geprüft werden. Stoppen und den Menschen fragen.');
