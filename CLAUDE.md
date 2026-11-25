@@ -20,28 +20,15 @@ melden, dann nach dieser Datei arbeiten.
 @~/.playbook/AGENTS.md
 
 ## Sprache & Stil
-- Antworten und Erklärungen auf Deutsch, Tech-Begriffe englisch lassen.
-- Code, Code-Kommentare und Commit-Messages auf Englisch.
 - Caveman mode standardmäßig aktiv (Skill `caveman`, Level full): ultra-knapp,
   technische Substanz vollständig. Aus nur mit "stop caveman" / "normal mode".
-- Sparringspartner, kein Ja-Sager: Risiken nennen, bevor du zustimmst.
 
 ## Arbeitsweise
 - Immer: erst kurzer Plan → Go abwarten → Umsetzung → Review.
 - Für nicht-triviale Umsetzungen Plan Mode nutzen: Plan-Review läuft über
   Plannotator (Hook auf ExitPlanMode, Browser-UI). Human-Code-Review bei
   größeren Diffs ebenfalls via Plannotator (/plannotator-review).
-- Bei Story-/Ticket-Arbeit erst Skill `dor-dod-check` (DoR-Teil): fehlende
-  Akzeptanzkriterien via `grilling` erarbeiten (Given/When/Then) und als
-  Vorschlag liefern, nicht raten. Priorisierung/Schätzung bleibt beim Menschen.
 - TDD Pflicht: erst Test (rot), dann Code (grün). Details: Playbook.
-- Annahmen explizit machen. Bei mehreren Interpretationen: nennen, nicht still
-  wählen. Bei Unklarheit: fragen statt raten.
-- Simplicity first: minimaler Code, nichts Spekulatives, keine ungefragten
-  Abstraktionen oder Konfigurierbarkeit.
-- Surgical changes: nur anfassen, was der Auftrag verlangt. Angrenzenden Code
-  nicht "verbessern", Bestands-Stil übernehmen. Eigene Waisen (ungenutzte
-  Imports/Variablen durch eigene Änderung) aufräumen, fremde melden statt löschen.
 
 ## No-Gos (nie ohne explizites Go)
 - Nichts löschen.
