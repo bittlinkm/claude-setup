@@ -41,9 +41,19 @@ function checkWithoutCore(dir) {
   }
 }
 
+const CORE = path.join(os.homedir(), '.playbook', 'tools', 'test-lock.js');
+const GUARDED = [CORE, path.join(os.homedir(), '.claude', 'hooks', 'test-lock-hook.js')];
+
+// A missing, damaged or odd core must not switch the lock off.
 function checkLock(dir) {
-  const core = path.join(os.homedir(), '.playbook', 'tools', 'test-lock.js');
-  return fs.existsSync(core) ? require(core).checkLock(dir) : checkWithoutCore(dir);
+  try {
+    const lock = require(CORE).checkLock(dir);
+    const complete = lock.state === 'active' ? Array.isArray(lock.files) && Boolean(lock.root) : ['none', 'inactive', 'broken'].includes(lock.state);
+    if (complete) return lock;
+  } catch {
+    // fall through
+  }
+  return checkWithoutCore(dir);
 }
 
 // Real spelling of a path whose last parts may not exist yet, with the closest existing folder.
@@ -61,6 +71,10 @@ function resolveReal(file) {
   return { full: path.join(real, ...missing), folder };
 }
 
+function ask(reason) {
+  console.log(JSON.stringify({ hookSpecificOutput: { hookEventName: 'PreToolUse', permissionDecision: 'ask', permissionDecisionReason: reason } }));
+}
+
 const key = (text) => (process.platform === 'win32' ? text.toLowerCase() : text);
 
 function block(message) {
@@ -76,6 +90,9 @@ function beforeEdit(input, cwd) {
     return block('Die Sperrdatei der Tests wird nicht von Hand geändert. Stoppen und den Menschen fragen.');
   }
   if (!folder) return;
+  if (GUARDED.some((file) => key(resolveReal(file).full) === key(full)) && ['active', 'broken'].includes(checkLock(cwd).state)) {
+    return ask('Ändert den Code der Testsperre, während eine Sperre aktiv ist. Das entscheidet der Mensch.');
+  }
   const lock = checkLock(folder);
   if (lock.state === 'broken') return block(BROKEN);
   if (lock.state !== 'active') return;
@@ -89,15 +106,7 @@ function beforeEdit(input, cwd) {
 function beforeShell(input) {
   const command = typeof input.command === 'string' ? input.command : '';
   if (!/test-lock(\.js)?["']?\s+unlock\b/i.test(command) && !/test-lock\.json/i.test(command)) return;
-  console.log(
-    JSON.stringify({
-      hookSpecificOutput: {
-        hookEventName: 'PreToolUse',
-        permissionDecision: 'ask',
-        permissionDecisionReason: 'Hebt die Sperre der freigegebenen Tests auf oder greift in die Sperrdatei ein. Das entscheidet der Mensch.',
-      },
-    }),
-  );
+  ask('Hebt die Sperre der freigegebenen Tests auf oder greift in die Sperrdatei ein. Das entscheidet der Mensch.');
 }
 
 function afterShell(cwd) {
