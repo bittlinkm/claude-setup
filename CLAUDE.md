@@ -3,10 +3,19 @@
 ## Vorrang bei Widersprüchen
 1. Explizite Anweisung im Chat.
 2. Projekt-`AGENTS.md` im jeweiligen Repo.
-3. Diese Datei.
+3. Playbook (`~/.playbook`, Import unten) für Ablauf, Schritte und Gates.
+4. Diese Datei.
 
 Widerspruch zwischen diesen Ebenen: melden und fragen, nicht still eine Seite
 wählen.
+
+## Playbook
+Bei Entwicklungsarbeit gilt das Playbook. Nur die passende Datei daraus lesen.
+superpowers und andere Skills liefern die Technik je Schritt; bei Reihenfolge
+und Gates gewinnt das Playbook. Ist der Import unten nicht geladen: einmal
+melden, dann nach dieser Datei arbeiten.
+
+@~/.playbook/AGENTS.md
 
 ## Sprache & Stil
 - Antworten und Erklärungen auf Deutsch, Tech-Begriffe englisch lassen.
