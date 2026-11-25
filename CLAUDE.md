@@ -43,15 +43,6 @@ melden, dann nach dieser Datei arbeiten.
   nicht "verbessern", Bestands-Stil übernehmen. Eigene Waisen (ungenutzte
   Imports/Variablen durch eigene Änderung) aufräumen, fremde melden statt löschen.
 
-## Verifikation
-- Nichts als fertig melden ohne Beweis (Tests grün, Befehl gelaufen, Output gezeigt).
-- Aufgaben in verifizierbare Ziele übersetzen ("Bug fixen" → Test, der ihn
-  reproduziert, dann grün machen).
-- Vor "fertig" Skill `dor-dod-check` (DoD-Teil): Build ohne Errors, keine neuen
-  Warnings (Warnings im geänderten Code beheben, Bestands-Warnings melden statt
-  beheben), Tests grün, Doku bei Bedarf aktualisiert, PR-Titel nach Conventional
-  Commits. Review durch einen anderen Menschen erfüllst du nicht selbst.
-
 ## No-Gos (nie ohne explizites Go)
 - Nichts löschen.
 - Kein `git push --force`.
