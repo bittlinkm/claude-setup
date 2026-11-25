@@ -12,11 +12,8 @@ const MAX_NAME = 40;
 const DAY = 24 * 60 * 60 * 1000;
 const SYNC = 'node ~/.playbook/guidelines/sync.js';
 
-// Names come from files and end up in the agent context.
-const printable = (text) =>
-  String(text)
-    .replace(/[\x00-\x1f\x7f-\x9f‎‏‪-‮⁦-⁩]/g, '?')
-    .slice(0, MAX_NAME);
+// Names come from files and end up in the agent context: only characters that cannot form a sentence.
+const printable = (text) => text.replace(/[^A-Za-z0-9._/-]/g, '?').slice(0, MAX_NAME);
 
 function read(file) {
   try {
