@@ -11,6 +11,8 @@ wählen.
 
 ## Playbook
 Bei Entwicklungsarbeit gilt das Playbook. Nur die passende Datei daraus lesen.
+Git, Projekt-Setup, Stack, Design, Deployment, Fertigmelden und Security stehen
+in `~/.playbook/topics/`, der Ablauf in `~/.playbook/process/`.
 superpowers und andere Skills liefern die Technik je Schritt; bei Reihenfolge
 und Gates gewinnt das Playbook. Ist der Import unten nicht geladen: einmal
 melden, dann nach dieser Datei arbeiten.
