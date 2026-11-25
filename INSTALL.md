@@ -24,9 +24,10 @@ In `sources.json` die eigenen Quellen eintragen (Datei wird nie committet),
 dann selbst starten: `node $HOME/.playbook/guidelines/sync.js`. Details:
 `~/.playbook/guidelines/README.md`.
 
-Die Skills des Playbooks verknüpfen: Befehl in
-`~/.playbook/claude/README.md`, Abschnitt „Skills“. Nach jedem neuen Skill
-wiederholen. Nie unter dem eigenen Namen verknüpfen, der Grund steht dort.
+Die Skills und Agents des Playbooks verknüpfen: Befehle in
+`~/.playbook/claude/README.md`, Abschnitte „Skills“ und „Agents“. Für Skills
+nach jedem neuen Skill wiederholen. Skills nie unter dem eigenen Namen
+verknüpfen, der Grund steht dort.
 
 Verifizieren: neue Session starten. Der SessionStart-Hook schweigt, wenn
 alles da und aktuell ist, sonst nennt er, was fehlt.
