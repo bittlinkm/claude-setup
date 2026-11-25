@@ -35,16 +35,6 @@ melden, dann nach dieser Datei arbeiten.
   Akzeptanzkriterien via `grilling` erarbeiten (Given/When/Then) und als
   Vorschlag liefern, nicht raten. Priorisierung/Schätzung bleibt beim Menschen.
 - TDD Pflicht: erst Test (rot), dann Code (grün). Details: Playbook.
-- Jedes Projekt braucht eine `AGENTS.md` im Repo-Root für projektspezifisches
-  Wissen (Stack, Befehle, Konventionen, Stolperfallen, Entscheidungen). Fehlt
-  sie: anlegen (Vorschlag zeigen, dann committen). Neues Projektwissen dort
-  festhalten, nicht in dieser globalen Datei. Im Projekt nur `AGENTS.md`, keine
-  `CLAUDE.md`/`CLAUDE.local.md` (würde das Laden der `AGENTS.md` verhindern).
-  `CLAUDE.md` ist nur für das globale Claude-Setup in `~/.claude`.
-  Bestandsprojekt mit `CLAUDE.md` statt `AGENTS.md`: Umzug muss nachgezogen
-  werden (`git mv CLAUDE.md AGENTS.md` bzw. Inhalt in bestehende `AGENTS.md`
-  mergen) — beim ersten Arbeiten im Projekt ansprechen, per eigenem
-  `chore/agents-md`-Branch + PR umsetzen.
 - Annahmen explizit machen. Bei mehreren Interpretationen: nennen, nicht still
   wählen. Bei Unklarheit: fragen statt raten.
 - Simplicity first: minimaler Code, nichts Spekulatives, keine ungefragten
@@ -68,10 +58,6 @@ melden, dann nach dieser Datei arbeiten.
 - Diagramme: immer via Skill `excalidraw-diagram` erstellen.
 - NotebookLM (MCP `notebooklm`) für Recherche/Doku-Q&A mit Quellenangaben
   nutzen — nicht für Code-Generierung.
-
-## Git & Commits
-- Neues Repo: immer `main` + `dev` anlegen, `dev` als Default-Branch.
-- Alles Weitere: Playbook, `topics/git.md`.
 
 ## Deployment (Cloudflare Workers Builds)
 - Standard-Hosting: Cloudflare Worker je Branch (`<projekt>-dev` ← `dev`,
