@@ -17,11 +17,11 @@ enthält CLAUDE.md/Skills/Settings direkt die Claude-spezifischen Regeln.
 `CLAUDE.md` importiert `~/.playbook/AGENTS.md`. Ohne das Playbook gelten nur
 die Kurzregeln und No-Gos aus `CLAUDE.md`.
 ```
-git clone https://github.com/bittlinkm/playbook.git ~/.playbook
-cp ~/.playbook/guidelines/sources.example.json ~/.playbook/guidelines/sources.json
+git clone https://github.com/bittlinkm/playbook.git $HOME/.playbook
+cp $HOME/.playbook/guidelines/sources.example.json $HOME/.playbook/guidelines/sources.json
 ```
 In `sources.json` die eigenen Quellen eintragen (Datei wird nie committet),
-dann selbst starten: `node ~/.playbook/guidelines/sync.js`. Details:
+dann selbst starten: `node $HOME/.playbook/guidelines/sync.js`. Details:
 `~/.playbook/guidelines/README.md`.
 
 Verifizieren: neue Session starten. Der SessionStart-Hook schweigt, wenn
