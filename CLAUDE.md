@@ -71,18 +71,7 @@ melden, dann nach dieser Datei arbeiten.
 
 ## Git & Commits
 - Neues Repo: immer `main` + `dev` anlegen, `dev` als Default-Branch.
-- Branching: feature/... und fix/...-Branches von `dev`, nie direkt auf main
-  oder dev.
-- Bestandsrepo ohne `dev`-Branch: kurzer Hinweis, dass `dev` nachgezogen
-  werden sollte — nicht selbstständig anlegen.
-- Conventional Commits (feat/fix/chore...), englisch.
-- Selbstständig committen: erlaubt.
-- Flow: `feature/...`/`fix/...` → PR nach `dev` → PR `dev` → `main`. Kein
-  direkter Push auf `dev`/`main`. PRs öffnen ja, mergen erst nach Go des Users
-  (außer Batch explizit freigegeben) — Merge löst Deployment aus (s. u.).
-- Vor jedem neuen Branch: `git fetch`, dann prüfen, ob `main` Commits hat,
-  die `dev` fehlen (`git log origin/dev..origin/main`). Falls ja, erst `dev`
-  syncen (s. Deployment), dann von `dev` abzweigen.
+- Alles Weitere: Playbook, `topics/git.md`.
 
 ## Deployment (Cloudflare Workers Builds)
 - Standard-Hosting: Cloudflare Worker je Branch (`<projekt>-dev` ← `dev`,
