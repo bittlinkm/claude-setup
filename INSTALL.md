@@ -11,7 +11,21 @@ werden pro Maschine neu erzeugt/eingegeben.
 
 ## Repo
 Dieses `~/.claude` ist ein Git-Repo (public) — klonen bzw. pullen, dann
-enthält CLAUDE.md/Skills/Settings direkt alle Standing Rules.
+enthält CLAUDE.md/Skills/Settings direkt die Claude-spezifischen Regeln.
+
+## Playbook (agentenneutrale Entwicklungsregeln, privates Repo)
+`CLAUDE.md` importiert `~/.playbook/AGENTS.md`. Ohne das Playbook gelten nur
+die Kurzregeln und No-Gos aus `CLAUDE.md`.
+```
+git clone https://github.com/bittlinkm/playbook.git $HOME/.playbook
+cp $HOME/.playbook/guidelines/sources.example.json $HOME/.playbook/guidelines/sources.json
+```
+In `sources.json` die eigenen Quellen eintragen (Datei wird nie committet),
+dann selbst starten: `node $HOME/.playbook/guidelines/sync.js`. Details:
+`~/.playbook/guidelines/README.md`.
+
+Verifizieren: neue Session starten. Der SessionStart-Hook schweigt, wenn
+alles da und aktuell ist, sonst nennt er, was fehlt.
 
 ## claude.ai Connectors (Notion, Make, Netlify)
 Laufen als OAuth-Connector über den claude.ai-Account, nicht lokal
@@ -116,7 +130,5 @@ Nur Markdown, keine CLI, kein Login. Kommt per `git pull` direkt mit rein
 Aktiviert nur bei explizitem "schreib/fix mir einen Prompt für [Tool]".
 Verifizieren: keine — Skill lädt automatisch, wenn Trigger im Chat passt.
 
-## Sonstige Standing Rules (schon in CLAUDE.md, keine Aktion nötig)
-- Neues Repo: `main` + `dev` Branch.
-- UI-Components: 21st.dev bei Bedarf.
-- Diagramme: Skill `excalidraw-diagram`.
+## Sonstige Standing Rules
+Stehen im Playbook, siehe Abschnitt „Playbook“. Keine Aktion nötig.
