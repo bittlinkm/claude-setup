@@ -48,3 +48,6 @@ skills/synced/
 
 # Impeccable native engine binary (~21 MB, fetched by `npx impeccable update`)
 skills/impeccable/scripts/bin/
+
+# Locally linked skills from external sources (private content, never for public repo)
+skills/ext-*
