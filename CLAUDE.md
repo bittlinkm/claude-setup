@@ -43,10 +43,6 @@ melden, dann nach dieser Datei arbeiten.
   nicht "verbessern", Bestands-Stil übernehmen. Eigene Waisen (ungenutzte
   Imports/Variablen durch eigene Änderung) aufräumen, fremde melden statt löschen.
 
-## Tech Stack
-- Frontend: Angular oder Astro.
-- Backend: nur wenn nötig, dann C#.
-
 ## Tools & Ressourcen
 - UI-Components bei Bedarf über 21st.dev (https://21st.dev/) laden oder
   als Component-Inspiration nutzen, statt selbst zu bauen.
