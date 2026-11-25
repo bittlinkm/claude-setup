@@ -43,15 +43,6 @@ melden, dann nach dieser Datei arbeiten.
   nicht "verbessern", Bestands-Stil übernehmen. Eigene Waisen (ungenutzte
   Imports/Variablen durch eigene Änderung) aufräumen, fremde melden statt löschen.
 
-## Deployment (Cloudflare Workers Builds)
-- Standard-Hosting: Cloudflare Worker je Branch (`<projekt>-dev` ← `dev`,
-  `<projekt>` ← `main`), Auto-Deploy über Workers Builds. Setup, Stolperfallen,
-  Deploy-Status, CMS-Sync → Skill `cloudflare-workers-deploy`.
-- Kein manuelles `wrangler deploy` / `npm run deploy` ohne Go; Merge nach
-  `main` = Live-Deploy → nur mit Go.
-- CMS darf direkt auf `main` committen; dann `main` → `dev` syncen
-  (Fast-Forward-Push auf `dev` = einzige erlaubte Direkt-Push-Ausnahme).
-
 ## Verifikation
 - Nichts als fertig melden ohne Beweis (Tests grün, Befehl gelaufen, Output gezeigt).
 - Aufgaben in verifizierbare Ziele übersetzen ("Bug fixen" → Test, der ihn
