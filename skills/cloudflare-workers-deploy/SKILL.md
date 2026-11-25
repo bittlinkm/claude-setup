@@ -10,8 +10,9 @@ Cloudflare's Git integration (Workers Builds). No GitHub Action, no manual
 `wrangler deploy`.
 
 The safety rules (merge to `main` = live deploy → only with the user's go;
-no manual `wrangler deploy` / `npm run deploy` without go) live in the global
-CLAUDE.md and always apply.
+no manual `wrangler deploy` / `npm run deploy` without go) live in the playbook
+(`~/.playbook/topics/deployment.md`) and in the global CLAUDE.md no-gos, and
+always apply.
 
 ## Setup
 
@@ -87,8 +88,8 @@ live immediately. `dev` then falls behind and must be synced:
 
 1. `git fetch`, then `git log --oneline origin/dev..origin/main`.
 2. If `dev` has no own commits (`git merge-base --is-ancestor origin/dev origin/main`),
-   fast-forward: `git push origin origin/main:refs/heads/dev` — the one allowed
-   direct push to `dev`, never with `--force`.
+   fast-forward: `git push origin origin/main:refs/heads/dev` — an allowed
+   direct push to `dev` (see `~/.playbook/topics/git.md`), never with `--force`.
 3. Otherwise open a PR `main` → `dev`.
    **Before merging it**, check `gh repo view --json deleteBranchOnMerge,defaultBranchRef`:
    with `deleteBranchOnMerge: true` and default branch `dev`, GitHub deletes
