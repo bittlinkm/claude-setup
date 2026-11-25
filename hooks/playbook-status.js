@@ -43,7 +43,7 @@ function guidelineHint(root) {
     state = null;
   }
   const entries = state && typeof state === 'object' && !Array.isArray(state) ? Object.entries(state) : [];
-  if (!entries.length) return `Guidelines: Stand unbekannt. Bitte selbst starten: ${SYNC}`;
+  if (!entries.length) return `Guidelines: Stand unbekannt. Der Mensch muss das selbst starten, nicht der Agent: ${SYNC}`;
 
   for (const [name, entry] of entries) {
     const age = Date.now() - Date.parse(entry && entry.syncedAt);
@@ -53,7 +53,7 @@ function guidelineHint(root) {
   const items = [...unknown, ...stale];
   if (!items.length) return null;
   const more = items.length > MAX_LISTED ? `, und ${items.length - MAX_LISTED} weitere` : '';
-  return `Guidelines veraltet (${items.slice(0, MAX_LISTED).join(', ')}${more}). Bitte selbst starten: ${SYNC}`;
+  return `Guidelines veraltet (${items.slice(0, MAX_LISTED).join(', ')}${more}). Der Mensch muss das selbst starten, nicht der Agent: ${SYNC}`;
 }
 
 function status() {
