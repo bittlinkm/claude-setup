@@ -52,3 +52,11 @@ skills/impeccable/scripts/bin/
 # Locally linked skills and agents from external sources (private content, never for public repo)
 skills/ext-*
 agents/ext-*
+
+# Third-party skills, installed by `npx skills add heygen-com/hyperframes`
+skills/general-video/
+skills/hyperframes/
+skills/hyperframes-*/
+skills/media-use/
+skills/reverse-any-video/
+skills/style-sampling/
