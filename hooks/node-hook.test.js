@@ -110,6 +110,12 @@ test('without Node: other hooks report the problem without blocking', () => {
   }
 });
 
+test('Git checks the script out with LF, sh cannot run CRLF', () => {
+  const r = spawnSync('git', ['check-attr', 'eol', '--', 'hooks/node-hook.sh'], { cwd: path.join(__dirname, '..'), encoding: 'utf8' });
+  assert.match(r.stdout, /eol: lf$/m);
+  assert.doesNotMatch(fs.readFileSync(WRAPPER, 'utf8'), /\r/);
+});
+
 test('every hook in settings.json that needs Node starts through node-hook.sh', () => {
   const commands = [];
   for (const entries of Object.values(JSON.parse(fs.readFileSync(SETTINGS, 'utf8')).hooks)) {
