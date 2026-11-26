@@ -28,12 +28,12 @@
           },
           {
             "type": "command",
-            "command": "node ~/.claude/hooks/playbook-status.js",
+            "command": "sh ~/.claude/hooks/node-hook.sh start ~/.claude/hooks/playbook-status.js",
             "timeout": 5
           },
           {
             "type": "command",
-            "command": "node ~/.claude/hooks/test-lock-hook.js",
+            "command": "sh ~/.claude/hooks/node-hook.sh other ~/.claude/hooks/test-lock-hook.js",
             "timeout": 10
           }
         ]
@@ -45,7 +45,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node ~/.claude/hooks/test-lock-hook.js",
+            "command": "sh ~/.claude/hooks/node-hook.sh other ~/.claude/hooks/test-lock-hook.js",
             "timeout": 10
           }
         ]
@@ -55,7 +55,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node ~/.claude/hooks/playbook-hook.js command-guard",
+            "command": "sh ~/.claude/hooks/node-hook.sh commands ~/.claude/hooks/playbook-hook.js command-guard",
             "timeout": 10
           }
         ]
@@ -65,7 +65,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node ~/.claude/hooks/playbook-hook.js secret-guard",
+            "command": "sh ~/.claude/hooks/node-hook.sh secrets ~/.claude/hooks/playbook-hook.js secret-guard",
             "timeout": 10
           }
         ]
@@ -77,7 +77,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node ~/.claude/hooks/test-lock-hook.js",
+            "command": "sh ~/.claude/hooks/node-hook.sh other ~/.claude/hooks/test-lock-hook.js",
             "timeout": 10
           }
         ]
@@ -87,7 +87,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node ~/.claude/hooks/playbook-hook.js format-hook",
+            "command": "sh ~/.claude/hooks/node-hook.sh other ~/.claude/hooks/playbook-hook.js format-hook",
             "timeout": 30
           }
         ]
