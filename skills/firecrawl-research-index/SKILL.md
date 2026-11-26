@@ -15,9 +15,10 @@ There is **no fixed recipe**. Read the query, decide what kind it is, and choose
 
 ## The tools, and what each is uniquely good at
 
-- MCP: **`firecrawl_research_search_papers(query, k?)`**
-  CLI: **`firecrawl research search-papers <query> [--k <number>]`**
+- MCP: **`firecrawl_research_search_papers(query, k?, sort?, from?, to?)`**
+  CLI: **`firecrawl research search-papers <query> [--k <number>] [--sort <relevance|date_desc>] [--from <YYYY-MM-DD>] [--to <YYYY-MM-DD>]`**
   Semantic (HyDE) search over **abstracts**. The natural first move for almost any query.
+  Use `date_desc` for the newest of the most relevant matches; it does not list every paper in a date range, so add `from` (and `to`) to bound the dates.
   If results look thin or all-alike, re-run with a different framing (sibling domain, rival method, dataset/benchmark name) rather than giving up.
 
 - MCP: **`firecrawl_research_related_papers(seed_ids, intent, mode?, k?)`**
@@ -56,7 +57,7 @@ There is **no fixed recipe**. Read the query, decide what kind it is, and choose
 - **Enumeration / method-family** ("papers that do X", "alternatives to Adam", "benchmarks for Y") → the answer is a _set_, and this is where `related_papers` earns its keep: expand several strong anchors with `mode=similar`, re-seed from new strong hits. One search is never enough here.
 - **Exhibiting** ("papers that _use_ / exhibit property P") → the relevant papers apply P but their abstracts may not describe it. Go from P's defining paper outward via `citers`/`references`, and use `read_paper` to confirm a candidate actually uses P.
 - **Superlative / leaderboard** ("best on benchmark X", "largest", "most popular") → the ranking lives on **leaderboards / the web**, not in any single abstract. Use `firecrawl_search` / `firecrawl_scrape` to find the benchmark's leaderboard or rankings, read off the top models/papers, then `search_papers` each to get its paper. As a fallback, search the benchmark and `read_paper` candidates for reported numbers. The hardest kind — cast wide.
-- **Org / author filtered** ("from \<org\>", "by \<author\>") → topical match isn't enough; verify the affiliation/authorship (metadata or `read_paper`) before keeping a paper.
+- **Org / author filtered** ("from \<org\>", "by \<author\>") → topical match isn't enough; verify authorship from the listed authors and affiliation with `read_paper` (search results list author names but not affiliations) before keeping a paper.
 - **Compare-against** ("what does paper X benchmark against / build on") → the answer is _inside_ paper X: `read_paper(X, ...)` or `related_papers([X], ..., mode="references")`.
 
 ## Principles
@@ -67,3 +68,7 @@ There is **no fixed recipe**. Read the query, decide what kind it is, and choose
 - **Follow the literature, and keep what you find.** The seminal source, the competing methods, the close neighbors are usually a hop away — use `related_papers`, and _include_ them, not just the first hit. Stopping at one good result is the most common way to leave the reader with half an answer.
 - **Verify to exclude, not to gatekeep.** Use `read_paper` to rule a paper _out_ when a hard constraint clearly fails (wrong org/author, doesn't actually report the score). When a paper is plausibly relevant, lean toward keeping it rather than demanding proof.
 - **Only drop the clearly off-topic.** Don't pad with papers you're confident are unrelated — but that's a high bar; most plausibly-relevant work should make the cut.
+
+## See also
+
+- [firecrawl-build-search](https://github.com/firecrawl/skills/tree/main/skills/build/firecrawl-build-search) — building the paper index into an app instead of querying it here

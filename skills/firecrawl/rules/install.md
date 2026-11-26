@@ -15,7 +15,7 @@ description: |
 npx -y firecrawl-cli@latest init -y --browser
 ```
 
-This installs `firecrawl-cli` globally, authenticates via browser, and installs core, build, and workflow skills.
+This installs `firecrawl-cli` globally, authenticates via browser, and installs core and workflow skills. Build skills are a separate step: `firecrawl setup build`.
 
 This setup is safe to re-run when the CLI is missing, stale, or only partially configured.
 
@@ -31,6 +31,7 @@ To install skills manually:
 
 ```bash
 firecrawl setup skills
+firecrawl setup build
 firecrawl setup workflows
 ```
 
@@ -80,7 +81,7 @@ Ask the user how they'd like to authenticate:
 1. **Login with browser (Recommended)** - Run `firecrawl login --browser`
 2. **Enter API key manually** - Run `firecrawl login --api-key "<key>"` with a key from firecrawl.dev
 
-If you cannot obtain a key and the user cannot sign up, search, scrape, and interact still work without an API key on the keyless free tier (rate-limited). Commands that need an account — `crawl`, `map`, `download`, `agent`, `monitor`, `credit-usage`, and the feedback commands — prompt an interactive login when no credentials are set. Browser login or an API key remains preferred for the best results. See [agent onboarding](https://www.firecrawl.dev/agent-onboarding/SKILL.md) for the full set of onboarding paths.
+If you cannot obtain a key and the user cannot sign up, search, scrape, and interact still work without an API key on the keyless free tier (rate-limited). Commands that need an account — `crawl`, `map`, `download`, `agent`, `monitor`, `credit-usage`, and the feedback commands — prompt an interactive login in a terminal when no credentials are set; without one (an agent shell) they exit with `Not authenticated` and point at `firecrawl login --browser`, which needs no terminal input: run it, give the user the sign-in URL it prints, and it finishes once they approve. Browser login or an API key remains preferred for the best results. See [agent onboarding](https://www.firecrawl.dev/agent-onboarding/SKILL.md) for the full set of onboarding paths.
 
 ### Command not found
 
