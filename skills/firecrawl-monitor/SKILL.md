@@ -63,6 +63,7 @@ Read [goals.md](goals.md) when writing or refining `--goal` (and `--queries` for
 
 ## Constraints & tips
 
+- Each check uses credits for its underlying scrape, crawl, or search, plus optional judging. See [Monitoring pricing](https://docs.firecrawl.dev/features/monitoring#pricing).
 - Minimum schedule interval is **5 minutes**. Monitoring is **not available for zero-data-retention teams**.
 - **Prefer one monitor over repeated one-off scrapes** whenever the user wants the same URL checked more than once.
 - **Silence temporarily with `update --state paused`**; reserve `delete` for monitors that are permanently done. (`--state` is an update flag; `--status` is the global CLI status flag.)
@@ -78,3 +79,4 @@ Read [goals.md](goals.md) when writing or refining `--goal` (and `--queries` for
 - [firecrawl-scrape](../firecrawl-scrape/SKILL.md) — one-off scrape; escalate to `monitor` when checks become recurring
 - [firecrawl-crawl](../firecrawl-crawl/SKILL.md) — one-off crawl; pair with `--crawl-url` here for recurring crawl diffs
 - [firecrawl](../firecrawl/SKILL.md) — top-level workflow guide
+- [firecrawl-build-scrape](https://github.com/firecrawl/skills/tree/main/skills/build/firecrawl-build-scrape) — building recurring checks into an app instead of running it here
